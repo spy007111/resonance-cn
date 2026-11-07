@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
                 if (authRepository.generation.value != generation) return@launch
                 playbackManager.playSongs(songs)
             } catch (error: CancellationException) { throw error }
-            catch (_: Exception) { Toast.makeText(this@MainActivity, "Could not find music. Open Downloads to listen offline.", Toast.LENGTH_LONG).show() }
+            catch (_: Exception) { Toast.makeText(this@MainActivity, "无法获取音乐，可前往下载页面离线收听", Toast.LENGTH_LONG).show() }
         }
     }
 }

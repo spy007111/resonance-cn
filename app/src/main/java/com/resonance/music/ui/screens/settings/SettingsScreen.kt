@@ -37,24 +37,24 @@ fun SettingsScreen(
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            title = { Text("Log out") },
+            title = { Text("退出登录") },
             text = { Text("This will disconnect from the server and clear your credentials.") },
             confirmButton = {
                 TextButton(onClick = {
                     showLogoutDialog = false
                     viewModel.logout()
                     onLogout()
-                }) { Text("Log out") }
+                }) { Text("退出登录") }
             },
             dismissButton = {
-                TextButton(onClick = { showLogoutDialog = false }) { Text("Cancel") }
+                TextButton(onClick = { showLogoutDialog = false }) { Text("取消") }
             }
         )
     }
 
     Scaffold(
         topBar = {
-            SlimTopBar("Settings")
+            SlimTopBar("设置")
         }
     ) { padding ->
         Column(
@@ -65,7 +65,7 @@ fun SettingsScreen(
         ) {
             // ── Theme section ──
             Text(
-                "Theme",
+                "外观主题",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -89,20 +89,20 @@ fun SettingsScreen(
 
             // ── Server info ──
             Text(
-                "Server",
+                "服务器",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
 
             ListItem(
-                headlineContent = { Text("Server") },
+                headlineContent = { Text("服务器") },
                 supportingContent = { Text(uiState.serverUrl.ifEmpty { "Not connected" }) },
                 leadingContent = { Icon(Icons.Default.Cloud, contentDescription = null) }
             )
 
             ListItem(
-                headlineContent = { Text("Username") },
+                headlineContent = { Text("用户名") },
                 supportingContent = { Text(uiState.username.ifEmpty { "-" }) },
                 leadingContent = { Icon(Icons.Default.Person, contentDescription = null) }
             )
@@ -111,15 +111,15 @@ fun SettingsScreen(
 
             // ── Playback ──
             Text(
-                "Playback",
+                "播放设置",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
 
             ListItem(
-                headlineContent = { Text("Gapless playback") },
-                supportingContent = { Text("Seamless transition between tracks") },
+                headlineContent = { Text("无缝播放 (Gapless)") },
+                supportingContent = { Text("曲目切换时平滑衔接，消除间隙") },
                 leadingContent = { Icon(Icons.Default.GraphicEq, contentDescription = null) },
                 trailingContent = {
                     Switch(checked = uiState.gaplessPlayback, onCheckedChange = viewModel::setGaplessPlayback)
@@ -127,8 +127,8 @@ fun SettingsScreen(
             )
 
             ListItem(
-                headlineContent = { Text("Scrobble plays") },
-                supportingContent = { Text("Report played songs to server") },
+                headlineContent = { Text("记录听歌历史 (Scrobble)") },
+                supportingContent = { Text("将播放记录同步至 Navidrome 服务器") },
                 leadingContent = { Icon(Icons.Default.Equalizer, contentDescription = null) },
                 trailingContent = {
                     Switch(checked = uiState.scrobbleEnabled, onCheckedChange = viewModel::setScrobbleEnabled)
@@ -139,15 +139,15 @@ fun SettingsScreen(
 
             // ── Account ──
             Text(
-                "Account",
+                "账户",
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
 
             ListItem(
-                headlineContent = { Text("Log out") },
-                supportingContent = { Text("Disconnect from server") },
+                headlineContent = { Text("退出登录") },
+                supportingContent = { Text("断开与服务器的连接") },
                 leadingContent = {
                     Icon(
                         Icons.AutoMirrored.Filled.Logout,
@@ -172,7 +172,7 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    "Open source Navidrome client",
+                    "完全开源免费的 Navidrome 客户端",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

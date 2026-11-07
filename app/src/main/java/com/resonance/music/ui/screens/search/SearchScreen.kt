@@ -40,7 +40,7 @@ fun SearchScreen(
                 TextField(
                     value = uiState.query,
                     onValueChange = viewModel::onQueryChange,
-                    placeholder = { Text("Search artists, albums, songs...") },
+                    placeholder = { Text("搜索歌手、专辑、曲目...") },
                     singleLine = true,
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -79,7 +79,7 @@ fun SearchScreen(
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        "Search your music library",
+                        "搜索你的音乐库",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -94,7 +94,7 @@ fun SearchScreen(
                 if (uiState.artists.isNotEmpty()) {
                     item {
                         Text(
-                            "Artists",
+                            "歌手",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(16.dp)
                         )
@@ -114,7 +114,7 @@ fun SearchScreen(
                 if (uiState.albums.isNotEmpty()) {
                     item {
                         Text(
-                            "Albums",
+                            "专辑",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(16.dp)
                         )
@@ -132,7 +132,7 @@ fun SearchScreen(
                 if (uiState.songs.isNotEmpty()) {
                     item {
                         Text(
-                            "Songs",
+                            "歌曲",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(16.dp)
                         )

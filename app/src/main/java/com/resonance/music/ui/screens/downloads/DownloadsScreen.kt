@@ -25,25 +25,25 @@ fun DownloadsScreen(onBack: () -> Unit, viewModel: DownloadsViewModel = hiltView
     val download = LocalSongDownload.current
     var removing by remember { mutableStateOf<OfflineTrack?>(null) }
     removing?.let { track ->
-        AlertDialog(onDismissRequest = { removing = null }, title = { Text("Remove download?") },
+        AlertDialog(onDismissRequest = { removing = null }, title = { Text("删除此下载？") },
             text = { Text("Delete the saved copy of ${track.record.song.title} from this device?") },
-            confirmButton = { TextButton(onClick = { viewModel.remove(track); removing = null }) { Text("Remove") } },
-            dismissButton = { TextButton(onClick = { removing = null }) { Text("Cancel") } })
+            confirmButton = { TextButton(onClick = { viewModel.remove(track); removing = null }) { Text("删除") } },
+            dismissButton = { TextButton(onClick = { removing = null }) { Text("取消") } })
     }
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Downloads") }, navigationIcon = {
+        TopAppBar(title = { Text("下载") }, navigationIcon = {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") }
         })
     }) { padding ->
         LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(bottom = 16.dp)) {
             item {
-                ListItem(headlineContent = { Text("Download favorite songs") },
+                ListItem(headlineContent = { Text("下载喜爱的曲目") },
                     supportingContent = { Text("Sync over Wi-Fi every 6 hours. Saved songs stay until you remove them.") },
                     trailingContent = { Switch(checked = sync, onCheckedChange = viewModel::setSyncFavorites) })
                 Row(Modifier.padding(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     val ready = tracks.any { it.status == OfflineStatus.READY }
-                    Button(enabled = ready, onClick = { viewModel.play() }) { Icon(Icons.Default.PlayArrow, null); Text("Play all") }
-                    OutlinedButton(enabled = ready, onClick = { viewModel.play(shuffle = true) }) { Icon(Icons.Default.Shuffle, null); Text("Shuffle") }
+                    Button(enabled = ready, onClick = { viewModel.play() }) { Icon(Icons.Default.PlayArrow, null); Text("全部播放") }
+                    OutlinedButton(enabled = ready, onClick = { viewModel.play(shuffle = true) }) { Icon(Icons.Default.Shuffle, null); Text("随机播放") }
                 }
                 Text("${tracks.count { it.status == OfflineStatus.READY }} songs available offline", Modifier.padding(16.dp), style = MaterialTheme.typography.bodyMedium)
                 if (tracks.isEmpty()) Text("Download songs, albums, playlists, or artists to listen here without a connection.", Modifier.padding(16.dp))

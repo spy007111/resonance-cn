@@ -24,8 +24,8 @@ class CarLibrary @Inject constructor(
         offline.refresh()
         if (!signedIn()) return emptyList()
         return when {
-            parent == ROOT -> listOf(folder("downloads", "Downloads"), folder("albums:0", "Albums"),
-                folder("artists", "Artists"), folder("playlists", "Playlists"), folder("favorites", "Favorite songs"))
+            parent == ROOT -> listOf(folder("downloads", "下载"), folder("albums:0", "专辑"),
+                folder("artists", "歌手"), folder("playlists", "歌单"), folder("favorites", "Favorite songs"))
             parent == "downloads" -> offline.tracks.value.filter { it.status == OfflineStatus.READY }.mapNotNull { mediaItems.build(it.record.song) }
             parent == "favorites" -> music.getStarred().song.orEmpty().mapNotNull(mediaItems::build)
             parent.startsWith("albums:") -> {

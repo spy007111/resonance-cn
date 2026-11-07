@@ -63,7 +63,7 @@ fun LibraryScreen(
 
     Scaffold(
         topBar = {
-            SlimTopBar("Library")
+            SlimTopBar("媒体库")
         }
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
@@ -113,7 +113,7 @@ fun LibraryScreen(
 @Composable
 private fun ArtistsTab(uiState: LibraryUiState, onArtistClick: (String) -> Unit) {
     if (uiState.artists.isEmpty()) {
-        EmptyState(Icons.Default.Person, "Artists", "No artists found")
+        EmptyState(Icons.Default.Person, "歌手", "No artists found")
     } else {
         LazyColumn(contentPadding = PaddingValues(bottom = 12.dp)) {
             items(uiState.artists, key = { it.id }, contentType = { "artist" }) { artist ->
@@ -166,7 +166,7 @@ private fun AlbumsTab(
             }
         }
         if (uiState.albums.isEmpty()) {
-            EmptyState(Icons.Default.Album, "Albums", "No albums found")
+            EmptyState(Icons.Default.Album, "专辑", "No albums found")
         } else {
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(150.dp),
@@ -190,7 +190,7 @@ private fun AlbumsTab(
 @Composable
 private fun GenresTab(uiState: LibraryUiState, onGenreClick: (String) -> Unit) {
     if (uiState.genres.isEmpty()) {
-        EmptyState(Icons.Default.Category, "Genres", "No genres found")
+        EmptyState(Icons.Default.Category, "流派", "No genres found")
     } else {
         LazyColumn(contentPadding = PaddingValues(bottom = 12.dp)) {
             items(uiState.genres, key = { it.name }, contentType = { "genre" }) { genre ->
@@ -208,7 +208,7 @@ private fun GenresTab(uiState: LibraryUiState, onGenreClick: (String) -> Unit) {
 @Composable
 private fun PlaylistsTab(uiState: LibraryUiState, onPlaylistClick: (String) -> Unit) {
     if (uiState.playlists.isEmpty()) {
-        EmptyState(Icons.AutoMirrored.Filled.QueueMusic, "Playlists", "No playlists found")
+        EmptyState(Icons.AutoMirrored.Filled.QueueMusic, "歌单", "No playlists found")
     } else {
         LazyColumn(contentPadding = PaddingValues(bottom = 12.dp)) {
             items(uiState.playlists, key = { it.id }, contentType = { "playlist" }) { playlist ->
@@ -251,7 +251,7 @@ private fun FavoritesTab(
             if (uiState.starredArtists.isNotEmpty()) {
                 item {
                     Text(
-                        "Artists",
+                        "歌手",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -268,7 +268,7 @@ private fun FavoritesTab(
             if (uiState.starredAlbums.isNotEmpty()) {
                 item {
                     Text(
-                        "Albums",
+                        "专辑",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(16.dp)
                     )
@@ -285,7 +285,7 @@ private fun FavoritesTab(
             if (uiState.starredSongs.isNotEmpty()) {
                 item {
                     Text(
-                        "Songs",
+                        "歌曲",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(16.dp)
                     )

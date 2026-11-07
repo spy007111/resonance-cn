@@ -40,7 +40,7 @@ fun PlayerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Now Playing") },
+                title = { Text("正在播放") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Back")
@@ -150,7 +150,7 @@ fun PlayerScreen(
                 IconButton(onClick = viewModel::toggleShuffle) {
                     Icon(
                         Icons.Default.Shuffle,
-                        contentDescription = "Shuffle",
+                        contentDescription = "随机播放",
                         tint = if (uiState.shuffleEnabled) MaterialTheme.colorScheme.primary
                                else MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -170,7 +170,7 @@ fun PlayerScreen(
                 ) {
                     Icon(
                         imageVector = if (uiState.isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
-                        contentDescription = if (uiState.isPlaying) "Pause" else "Play",
+                        contentDescription = if (uiState.isPlaying) "Pause" else "播放",
                         modifier = Modifier.size(32.dp)
                     )
                 }
@@ -209,10 +209,10 @@ fun PlayerScreen(
                     )
                 }
                 IconButton(onClick = onLyricsClick) {
-                    Icon(Icons.Default.Lyrics, contentDescription = "Lyrics")
+                    Icon(Icons.Default.Lyrics, contentDescription = "歌词")
                 }
                 IconButton(onClick = onQueueClick) {
-                    Icon(Icons.AutoMirrored.Filled.QueueMusic, contentDescription = "Queue")
+                    Icon(Icons.AutoMirrored.Filled.QueueMusic, contentDescription = "播放队列")
                 }
             }
         }

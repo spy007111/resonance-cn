@@ -48,7 +48,7 @@ class PlaylistViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(isLoading = false, error = "Playlist not found")
                 }
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.localizedMessage ?: "Failed to load")
+                _uiState.value = _uiState.value.copy(isLoading = false, error = e.localizedMessage ?: "加载失败")
             }
         }
     }

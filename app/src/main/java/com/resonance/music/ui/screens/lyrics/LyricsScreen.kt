@@ -57,7 +57,7 @@ fun LyricsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Lyrics") },
+                title = { Text("歌词") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Back")
@@ -145,7 +145,7 @@ fun LyricsScreen(
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                "No lyrics available",
+                                "暂无歌词",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

@@ -75,7 +75,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Connect to your Navidrome server",
+                text = "连接到你的 Navidrome 音乐服务器",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
@@ -86,7 +86,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.serverUrl,
                 onValueChange = viewModel::onServerUrlChange,
-                label = { Text("Server URL") },
+                label = { Text("服务器地址") },
                 placeholder = { Text("https://music.example.com") },
                 leadingIcon = { Icon(Icons.Default.Cloud, contentDescription = null) },
                 singleLine = true,
@@ -106,7 +106,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.username,
                 onValueChange = viewModel::onUsernameChange,
-                label = { Text("Username") },
+                label = { Text("用户名") },
                 leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -122,7 +122,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
-                label = { Text("Password") },
+                label = { Text("密码") },
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -132,7 +132,7 @@ fun LoginScreen(
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                            contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                            contentDescription = if (passwordVisible) "隐藏密码" else "显示密码"
                         )
                     }
                 },
@@ -178,7 +178,7 @@ fun LoginScreen(
                     )
                 } else {
                     Text(
-                        "Connect",
+                        "连接服务器",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }

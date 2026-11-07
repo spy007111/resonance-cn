@@ -143,14 +143,14 @@ fun ArtistScreen(
                                 enabled = uiState.tracks.isNotEmpty()
                             ) {
                                 Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
-                                Spacer(Modifier.width(4.dp)); Text("Play")
+                                Spacer(Modifier.width(4.dp)); Text("播放")
                             }
                             OutlinedButton(
                                 onClick = { viewModel.playAll(shuffle = true) },
                                 enabled = uiState.tracks.isNotEmpty()
                             ) {
                                 Icon(Icons.Default.Shuffle, contentDescription = null, modifier = Modifier.size(18.dp))
-                                Spacer(Modifier.width(4.dp)); Text("Shuffle")
+                                Spacer(Modifier.width(4.dp)); Text("随机播放")
                             }
                             // Loop toggle reflects + drives the global repeat mode.
                             FilledIconToggleButton(
@@ -186,12 +186,12 @@ fun ArtistScreen(
                         Tab(
                             selected = selectedTab == 0,
                             onClick = { selectedTab = 0 },
-                            text = { Text("Albums") }
+                            text = { Text("专辑") }
                         )
                         Tab(
                             selected = selectedTab == 1,
                             onClick = { selectedTab = 1 },
-                            text = { Text("Tracks") }
+                            text = { Text("曲目") }
                         )
                     }
                 }

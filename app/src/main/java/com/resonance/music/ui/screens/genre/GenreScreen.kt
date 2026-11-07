@@ -49,7 +49,7 @@ fun GenreScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    "No albums in this genre",
+                    "该流派下暂无专辑",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

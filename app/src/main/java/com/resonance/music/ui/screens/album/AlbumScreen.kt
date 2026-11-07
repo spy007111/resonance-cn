@@ -66,12 +66,12 @@ fun AlbumScreen(
                         }
                         DropdownMenu(expanded = showAlbumMenu, onDismissRequest = { showAlbumMenu = false }) {
                             DropdownMenuItem(
-                                text = { Text("Play next") },
+                                text = { Text("下一首播放") },
                                 onClick = { showAlbumMenu = false; viewModel.playAllNext() },
                                 leadingIcon = { Icon(Icons.Default.QueuePlayNext, contentDescription = null) }
                             )
                             DropdownMenuItem(
-                                text = { Text("Add to queue") },
+                                text = { Text("加入队列") },
                                 onClick = { showAlbumMenu = false; viewModel.addAllToQueue() },
                                 leadingIcon = { Icon(Icons.AutoMirrored.Filled.PlaylistAdd, contentDescription = null) }
                             )
@@ -163,12 +163,12 @@ fun AlbumScreen(
                             Button(onClick = { viewModel.playAll(shuffle = false) }) {
                                 Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
                                 Spacer(modifier = Modifier.width(4.dp))
-                                Text("Play")
+                                Text("播放")
                             }
                             OutlinedButton(onClick = { viewModel.playAll(shuffle = true) }) {
                                 Icon(Icons.Default.Shuffle, contentDescription = null, modifier = Modifier.size(18.dp))
                                 Spacer(modifier = Modifier.width(4.dp))
-                                Text("Shuffle")
+                                Text("随机播放")
                             }
                         }
                     }

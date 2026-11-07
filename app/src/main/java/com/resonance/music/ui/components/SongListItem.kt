@@ -62,35 +62,35 @@ fun SongListItem(
                 ) {
                     actions.onPlayNext?.let { action ->
                         DropdownMenuItem(
-                            text = { Text("Play next") },
+                            text = { Text("下一首播放") },
                             onClick = { showMenu = false; action() },
                             leadingIcon = { Icon(Icons.Default.QueuePlayNext, contentDescription = null) }
                         )
                     }
                     actions.onAddToQueue?.let { action ->
                         DropdownMenuItem(
-                            text = { Text("Add to queue") },
+                            text = { Text("加入队列") },
                             onClick = { showMenu = false; action() },
                             leadingIcon = { Icon(Icons.AutoMirrored.Filled.PlaylistAdd, contentDescription = null) }
                         )
                     }
                     actions.onGoToAlbum?.let { action ->
                         DropdownMenuItem(
-                            text = { Text("Go to album") },
+                            text = { Text("查看专辑") },
                             onClick = { showMenu = false; action() },
                             leadingIcon = { Icon(Icons.Default.Album, contentDescription = null) }
                         )
                     }
                     downloadSong?.let { download ->
                         DropdownMenuItem(
-                            text = { Text("Download") },
+                            text = { Text("下载") },
                             onClick = { showMenu = false; download(song) },
                             leadingIcon = { Icon(Icons.Default.Download, contentDescription = null) }
                         )
                     }
                     actions.onGoToArtist?.let { action ->
                         DropdownMenuItem(
-                            text = { Text("Go to artist") },
+                            text = { Text("查看歌手") },
                             onClick = { showMenu = false; action() },
                             leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) }
                         )

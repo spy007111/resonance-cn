@@ -44,7 +44,7 @@ fun QueueScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Queue") },
+                title = { Text("播放队列") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -73,9 +73,9 @@ fun QueueScreen(
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("Queue is empty", style = MaterialTheme.typography.titleMedium)
+                    Text("队列为空", style = MaterialTheme.typography.titleMedium)
                     Text(
-                        "Play some music to fill the queue",
+                        "挑选一首歌开始播放吧",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

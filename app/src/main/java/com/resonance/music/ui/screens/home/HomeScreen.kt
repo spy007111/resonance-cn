@@ -108,7 +108,7 @@ fun HomeScreen(
                     ) {
                         Icon(Icons.Default.Shuffle, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text("Shuffle all")
+                        Text("全部随机")
                     }
                 }
 
@@ -150,7 +150,7 @@ private fun LazyListScope.albumShelf(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(title, style = MaterialTheme.typography.titleLarge)
-                TextButton(onClick = onSeeAll) { Text("See all") }
+                TextButton(onClick = onSeeAll) { Text("查看全部") }
             }
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp),
@@ -242,7 +242,7 @@ private fun HeroCard(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ) {
-            Icon(Icons.Default.PlayArrow, contentDescription = "Play", modifier = Modifier.size(28.dp))
+            Icon(Icons.Default.PlayArrow, contentDescription = "播放", modifier = Modifier.size(28.dp))
         }
     }
 }
@@ -251,7 +251,7 @@ private fun HeroCard(
 private fun ErrorState(error: String?, onRetry: () -> Unit, modifier: Modifier) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Failed to load", style = MaterialTheme.typography.titleMedium)
+            Text("加载失败", style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 error ?: "Unknown error",
@@ -259,7 +259,7 @@ private fun ErrorState(error: String?, onRetry: () -> Unit, modifier: Modifier) 
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(16.dp))
-            FilledTonalButton(onClick = onRetry) { Text("Retry") }
+            FilledTonalButton(onClick = onRetry) { Text("重试") }
         }
     }
 }

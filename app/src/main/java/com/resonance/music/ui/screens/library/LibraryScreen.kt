@@ -28,7 +28,14 @@ import com.resonance.music.ui.components.SlimTopBar
 import com.resonance.music.ui.components.SongActions
 import com.resonance.music.ui.components.SongListItem
 
-enum class LibraryTab { Artists, Albums, Genres, Playlists, Favorites }
+enum class LibraryTab(val label: String) {
+    Songs("歌曲"),
+    Artists("歌手"),
+    Albums("专辑"),
+    Playlists("歌单"),
+    Genres("流派"),
+    Favorites("收藏")
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,12 +46,13 @@ fun LibraryScreen(
     onGenreClick: (String) -> Unit,
     viewModel: LibraryViewModel = hiltViewModel()
 ) {
-    var selectedTab by remember { mutableStateOf(LibraryTab.Artists) }
+    var selectedTab by remember { mutableStateOf(LibraryTab.Songs) }
     val uiState by viewModel.uiState.collectAsState()
 
     // Load data when tab changes
     LaunchedEffect(selectedTab) {
         when (selectedTab) {
+            LibraryTab.Songs -> viewModel.loadSongs()
             LibraryTab.Artists -> viewModel.loadArtists()
             LibraryTab.Albums -> viewModel.loadAlbums()
             LibraryTab.Genres -> viewModel.loadGenres()
@@ -72,7 +80,7 @@ fun LibraryScreen(
                     Tab(
                         selected = selectedTab == tab,
                         onClick = { selectedTab = tab },
-                        text = { Text(tab.name) }
+                        text = { Text(tab.label) }
                     )
                 }
             }
@@ -87,6 +95,7 @@ fun LibraryScreen(
             } else {
                 Box(modifier = Modifier.fillMaxSize().nestedScroll(pullState.nestedScrollConnection)) {
                     when (selectedTab) {
+                        LibraryTab.Songs -> SongsTab(uiState, onAlbumClick, onArtistClick, viewModel)
                         LibraryTab.Artists -> ArtistsTab(uiState, onArtistClick)
                         LibraryTab.Albums -> AlbumsTab(uiState, onAlbumClick, viewModel::setAlbumSort)
                         LibraryTab.Genres -> GenresTab(uiState, onGenreClick)
@@ -103,6 +112,70 @@ fun LibraryScreen(
                                 alpha = if (pullState.isRefreshing) 1f
                                         else pullState.progress.coerceIn(0f, 1f)
                             }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SongsTab(
+    uiState: LibraryUiState,
+    onAlbumClick: (String) -> Unit,
+    onArtistClick: (String) -> Unit,
+    viewModel: LibraryViewModel
+) {
+    if (uiState.songs.isEmpty()) {
+        EmptyState(Icons.Default.MusicNote, "歌曲", "媒体库中暂无歌曲")
+    } else {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "共 ${uiState.songs.size} 首歌曲",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilledTonalButton(
+                        onClick = { viewModel.playAllSongs(shuffle = false) },
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    ) {
+                        Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text("顺序播放")
+                    }
+                    Button(
+                        onClick = { viewModel.playAllSongs(shuffle = true) },
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    ) {
+                        Icon(Icons.Default.Shuffle, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text("随机播放")
+                    }
+                }
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                items(uiState.songs, key = { it.id }, contentType = { "song" }) { song ->
+                    SongListItem(
+                        song = song,
+                        onClick = { viewModel.playSong(song) },
+                        actions = SongActions(
+                            onPlayNext = { viewModel.playNext(song) },
+                            onAddToQueue = { viewModel.addToQueue(song) },
+                            onGoToArtist = song.artistId?.let { id -> { onArtistClick(id) } },
+                            onGoToAlbum = song.albumId?.let { id -> { onAlbumClick(id) } }
+                        )
                     )
                 }
             }

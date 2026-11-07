@@ -25,6 +25,7 @@ data class LibraryUiState(
     val artists: List<ArtistItem> = emptyList(),
     val albums: List<AlbumItem> = emptyList(),
     val albumSort: AlbumSort = AlbumSort.AZ,
+    val songs: List<SongItem> = emptyList(),
     val genres: List<GenreItem> = emptyList(),
     val playlists: List<PlaylistItem> = emptyList(),
     val starredArtists: List<ArtistItem> = emptyList(),
@@ -45,6 +46,7 @@ class LibraryViewModel @Inject constructor(
 
     private var artistsLoaded = false
     private var albumsLoaded = false
+    private var songsLoaded = false
     private var playlistsLoaded = false
     private var favoritesLoaded = false
     private var genresLoaded = false
@@ -75,6 +77,38 @@ class LibraryViewModel @Inject constructor(
         if (albumsLoaded) return
         albumsLoaded = true
         loadAlbumsWith(_uiState.value.albumSort)
+    }
+
+    fun loadSongs() {
+        if (songsLoaded) return
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true)
+            try {
+                val songs = musicRepository.getAllSongs(limit = 500)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    songs = songs,
+                    coverArtUrlBuilder = coverArtBuilder
+                )
+                songsLoaded = true
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(isLoading = false, error = e.localizedMessage)
+            }
+        }
+    }
+
+    fun playSong(song: SongItem) {
+        val songs = _uiState.value.songs
+        val index = songs.indexOf(song).coerceAtLeast(0)
+        playbackManager.playSongs(songs, index)
+    }
+
+    fun playAllSongs(shuffle: Boolean = false) {
+        val songs = _uiState.value.songs
+        if (songs.isNotEmpty()) {
+            val list = if (shuffle) songs.shuffled() else songs
+            playbackManager.playSongs(list, 0)
+        }
     }
 
     fun setAlbumSort(sort: AlbumSort) {
@@ -181,6 +215,13 @@ class LibraryViewModel @Inject constructor(
                         albums = albums, coverArtUrlBuilder = coverArtBuilder, error = null
                     )
                     albumsLoaded = true
+                }
+                LibraryTab.Songs -> {
+                    val songs = musicRepository.getAllSongs(limit = 500)
+                    _uiState.value = _uiState.value.copy(
+                        songs = songs, coverArtUrlBuilder = coverArtBuilder, error = null
+                    )
+                    songsLoaded = true
                 }
                 LibraryTab.Genres -> {
                     val genres = musicRepository.getGenres()

@@ -155,6 +155,21 @@ class MusicRepository @Inject constructor(
         return env.randomSongs?.song ?: emptyList()
     }
 
+    suspend fun getAllSongs(limit: Int = 500): List<SongItem> {
+        return try {
+            // 首先使用 search3 拉取单曲总库
+            val root = api.search(query = "", songCount = limit, artistCount = 0, albumCount = 0)
+            val env = root.response
+            if (env.isOk && env.searchResult3?.song?.isNotEmpty() == true) {
+                env.searchResult3.song
+            } else {
+                getRandomSongs(size = limit)
+            }
+        } catch (_: Exception) {
+            getRandomSongs(size = limit)
+        }
+    }
+
     // --- Scrobble ---
 
     suspend fun scrobble(songId: String, submission: Boolean = true) {

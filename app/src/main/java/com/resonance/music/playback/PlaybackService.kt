@@ -26,6 +26,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import com.resonance.music.data.repository.AuthRepository
+import com.resonance.music.data.repository.MusicRepository
+import com.resonance.music.data.repository.SettingsStore
 import com.resonance.music.data.download.OfflineLibrary
 import com.resonance.music.data.download.OfflineStatus
 import com.resonance.music.MainActivity
@@ -41,8 +43,11 @@ class PlaybackService : MediaLibraryService() {
     @Inject lateinit var auth: AuthRepository
     @Inject lateinit var offline: OfflineLibrary
     @Inject lateinit var reporting: PlaybackReporting
+    @Inject lateinit var musicRepository: MusicRepository
+    @Inject lateinit var settings: SettingsStore
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var mediaSession: MediaLibrarySession? = null
+    private var lockScreenLyrics: LockScreenLyrics? = null
 
     @OptIn(UnstableApi::class)
     override fun onCreate() {
@@ -100,6 +105,10 @@ class PlaybackService : MediaLibraryService() {
             }
         })
 
+        // Keeps the lock-screen media control's second line in sync with the
+        // current synced lyric line.
+        lockScreenLyrics = LockScreenLyrics(player, musicRepository, settings, serviceScope)
+
         mediaSession = MediaLibrarySession.Builder(this, player, sessionCallback)
             .setSessionActivity(buildContentIntent())
             .setSessionExtras(Bundle().apply {
@@ -145,6 +154,7 @@ class PlaybackService : MediaLibraryService() {
     }
 
     override fun onDestroy() {
+        lockScreenLyrics = null
         serviceScope.cancel()
         sessionCallback.release()
         reporting.release()

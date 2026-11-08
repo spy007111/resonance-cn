@@ -19,6 +19,7 @@ data class SettingsUiState(
     val username: String = "",
     val gaplessPlayback: Boolean = true,
     val scrobbleEnabled: Boolean = true,
+    val lockScreenLyrics: Boolean = true,
     val currentTheme: AppTheme = AppTheme.NEON_PULSE
 )
 
@@ -40,6 +41,7 @@ class SettingsViewModel @Inject constructor(
                 username = creds?.username ?: "",
                 gaplessPlayback = settingsStore.gaplessPlayback.first(),
                 scrobbleEnabled = settingsStore.scrobbleEnabled.first(),
+                lockScreenLyrics = settingsStore.lockScreenLyrics.first(),
                 currentTheme = themeRepository.currentTheme.first()
             )
         }
@@ -58,6 +60,11 @@ class SettingsViewModel @Inject constructor(
     fun setScrobbleEnabled(enabled: Boolean) {
         _uiState.value = _uiState.value.copy(scrobbleEnabled = enabled)
         viewModelScope.launch { settingsStore.setScrobbleEnabled(enabled) }
+    }
+
+    fun setLockScreenLyrics(enabled: Boolean) {
+        _uiState.value = _uiState.value.copy(lockScreenLyrics = enabled)
+        viewModelScope.launch { settingsStore.setLockScreenLyrics(enabled) }
     }
 
     fun logout() {

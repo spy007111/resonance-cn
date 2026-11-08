@@ -127,6 +127,15 @@ fun SettingsScreen(
             )
 
             ListItem(
+                headlineContent = { Text("锁屏歌词") },
+                supportingContent = { Text("在锁屏 / 通知栏的播放控件中显示当前歌词") },
+                leadingContent = { Icon(Icons.Default.Lyrics, contentDescription = null) },
+                trailingContent = {
+                    Switch(checked = uiState.lockScreenLyrics, onCheckedChange = viewModel::setLockScreenLyrics)
+                }
+            )
+
+            ListItem(
                 headlineContent = { Text("记录听歌历史 (Scrobble)") },
                 supportingContent = { Text("将播放记录同步至 Navidrome 服务器") },
                 leadingContent = { Icon(Icons.Default.Equalizer, contentDescription = null) },

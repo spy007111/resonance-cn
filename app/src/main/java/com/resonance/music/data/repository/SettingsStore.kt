@@ -22,10 +22,12 @@ class SettingsStore @Inject constructor(
     private object Keys {
         val GAPLESS = booleanPreferencesKey("gapless_playback")
         val SCROBBLE = booleanPreferencesKey("scrobble_enabled")
+        val LOCK_SCREEN_LYRICS = booleanPreferencesKey("lock_screen_lyrics")
     }
 
     val gaplessPlayback: Flow<Boolean> = context.settingsDataStore.data.map { it[Keys.GAPLESS] ?: true }
     val scrobbleEnabled: Flow<Boolean> = context.settingsDataStore.data.map { it[Keys.SCROBBLE] ?: true }
+    val lockScreenLyrics: Flow<Boolean> = context.settingsDataStore.data.map { it[Keys.LOCK_SCREEN_LYRICS] ?: true }
 
     suspend fun setGaplessPlayback(enabled: Boolean) {
         context.settingsDataStore.edit { it[Keys.GAPLESS] = enabled }
@@ -33,5 +35,9 @@ class SettingsStore @Inject constructor(
 
     suspend fun setScrobbleEnabled(enabled: Boolean) {
         context.settingsDataStore.edit { it[Keys.SCROBBLE] = enabled }
+    }
+
+    suspend fun setLockScreenLyrics(enabled: Boolean) {
+        context.settingsDataStore.edit { it[Keys.LOCK_SCREEN_LYRICS] = enabled }
     }
 }

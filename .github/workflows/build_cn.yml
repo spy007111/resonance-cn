@@ -40,8 +40,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
         with:
-          tag_name: v0.8.2-cn-${{ github.run_number }}
-          name: Resonance 中文版 v0.8.2 (Build ${{ github.run_number }})
+          tag_name: v0.8.3-cn-${{ github.run_number }}
+          name: Resonance 中文版 v0.8.3 (Build ${{ github.run_number }})
           files: app/build/outputs/apk/debug/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

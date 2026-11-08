@@ -26,8 +26,6 @@ data class LibraryUiState(
     val albums: List<AlbumItem> = emptyList(),
     val albumSort: AlbumSort = AlbumSort.AZ,
     val songs: List<SongItem> = emptyList(),
-    val genres: List<GenreItem> = emptyList(),
-    val playlists: List<PlaylistItem> = emptyList(),
     val starredArtists: List<ArtistItem> = emptyList(),
     val starredAlbums: List<AlbumItem> = emptyList(),
     val starredSongs: List<SongItem> = emptyList(),
@@ -47,9 +45,7 @@ class LibraryViewModel @Inject constructor(
     private var artistsLoaded = false
     private var albumsLoaded = false
     private var songsLoaded = false
-    private var playlistsLoaded = false
     private var favoritesLoaded = false
-    private var genresLoaded = false
 
     // One stable instance so UiState copies compare equal (a fresh lambda each
     // copy would break equality and force recomposition). 128px suits 48dp rows.
@@ -133,38 +129,6 @@ class LibraryViewModel @Inject constructor(
         }
     }
 
-    fun loadGenres() {
-        if (genresLoaded) return
-        genresLoaded = true
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
-            try {
-                val genres = musicRepository.getGenres()
-                _uiState.value = _uiState.value.copy(isLoading = false, genres = genres)
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.localizedMessage)
-            }
-        }
-    }
-
-    fun loadPlaylists() {
-        if (playlistsLoaded) return
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
-            try {
-                val playlists = musicRepository.getPlaylists()
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    playlists = playlists,
-                    coverArtUrlBuilder = coverArtBuilder
-                )
-                playlistsLoaded = true
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.localizedMessage)
-            }
-        }
-    }
-
     fun loadFavorites() {
         if (favoritesLoaded) return
         viewModelScope.launch {
@@ -222,18 +186,6 @@ class LibraryViewModel @Inject constructor(
                         songs = songs, coverArtUrlBuilder = coverArtBuilder, error = null
                     )
                     songsLoaded = true
-                }
-                LibraryTab.Genres -> {
-                    val genres = musicRepository.getGenres()
-                    _uiState.value = _uiState.value.copy(genres = genres, error = null)
-                    genresLoaded = true
-                }
-                LibraryTab.Playlists -> {
-                    val playlists = musicRepository.getPlaylists()
-                    _uiState.value = _uiState.value.copy(
-                        playlists = playlists, coverArtUrlBuilder = coverArtBuilder, error = null
-                    )
-                    playlistsLoaded = true
                 }
                 LibraryTab.Favorites -> {
                     val starred = musicRepository.getStarred()

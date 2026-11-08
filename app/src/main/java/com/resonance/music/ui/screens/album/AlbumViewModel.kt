@@ -18,9 +18,9 @@ data class AlbumUiState(
     val artistName: String = "",
     val artistId: String? = null,
     val year: Int? = null,
-    val genre: String? = null,
     val coverArtUrl: String? = null,
     val songs: List<SongItem> = emptyList(),
+    val coverArtUrlBuilder: ((String) -> String?)? = null,
     val isFavorite: Boolean = false,
     val error: String? = null
 )
@@ -49,9 +49,9 @@ class AlbumViewModel @Inject constructor(
                         artistName = album.artist ?: "",
                         artistId = album.artistId,
                         year = album.year,
-                        genre = album.genre,
                         coverArtUrl = album.coverArt?.let { musicRepository.getCoverArtUrl(it, 512) },
                         songs = album.song ?: emptyList(),
+                        coverArtUrlBuilder = { musicRepository.getCoverArtUrl(it, 128) },
                         isFavorite = album.starred != null
                     )
                 } else {

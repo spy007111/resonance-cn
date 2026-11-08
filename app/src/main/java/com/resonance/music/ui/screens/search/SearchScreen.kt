@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.resonance.music.ui.components.AlbumListItem
+import com.resonance.music.ui.components.ArtistAvatar
 import com.resonance.music.ui.components.SlimTopBar
 import com.resonance.music.ui.components.SongActions
 import com.resonance.music.ui.components.SongListItem
@@ -103,7 +104,10 @@ fun SearchScreen(
                         ListItem(
                             headlineContent = { Text(artist.name) },
                             leadingContent = {
-                                Icon(Icons.Default.Person, contentDescription = null)
+                                ArtistAvatar(
+                                    name = artist.name,
+                                    imageUrl = (artist.coverArt ?: artist.id).let { coverArtBuilder(it) }
+                                )
                             },
                             modifier = Modifier.clickable { onArtistClick(artist.id) }
                         )
@@ -140,6 +144,7 @@ fun SearchScreen(
                     items(uiState.songs, key = { "song_${it.id}" }) { song ->
                         SongListItem(
                             song = song,
+                            coverArtUrl = song.coverArt?.let { coverArtBuilder(it) },
                             onClick = { viewModel.playSong(song) },
                             actions = SongActions(
                                 onPlayNext = { viewModel.playNext(song) },

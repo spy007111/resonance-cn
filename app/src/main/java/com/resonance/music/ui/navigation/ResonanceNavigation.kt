@@ -1,6 +1,5 @@
 package com.resonance.music.ui.navigation
 
-import android.net.Uri
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
@@ -27,13 +26,11 @@ import com.resonance.music.playback.PlaybackManager
 import com.resonance.music.ui.components.MiniPlayer
 import com.resonance.music.ui.screens.album.AlbumScreen
 import com.resonance.music.ui.screens.artist.ArtistScreen
-import com.resonance.music.ui.screens.genre.GenreScreen
 import com.resonance.music.ui.screens.home.HomeScreen
 import com.resonance.music.ui.screens.library.LibraryScreen
 import com.resonance.music.ui.screens.login.LoginScreen
 import com.resonance.music.ui.screens.lyrics.LyricsScreen
 import com.resonance.music.ui.screens.player.PlayerScreen
-import com.resonance.music.ui.screens.playlist.PlaylistScreen
 import com.resonance.music.ui.screens.queue.QueueScreen
 import com.resonance.music.ui.screens.search.SearchScreen
 import com.resonance.music.ui.screens.settings.SettingsScreen
@@ -51,13 +48,9 @@ object Routes {
     const val QUEUE = "queue"
     const val ALBUM = "album/{albumId}"
     const val ARTIST = "artist/{artistId}"
-    const val PLAYLIST = "playlist/{playlistId}"
-    const val GENRE = "genre/{genre}"
 
     fun album(id: String) = "album/$id"
     fun artist(id: String) = "artist/$id"
-    fun playlist(id: String) = "playlist/$id"
-    fun genre(name: String) = "genre/${Uri.encode(name)}"
 }
 
 @Composable
@@ -124,8 +117,11 @@ fun ResonanceNavHost(
                     // run it transparent at 64dp inside a Surface that carries the
                     // bar colour, and add the system nav-bar inset back as a spacer
                     // below it (correct on both gesture- and 3-button-nav devices).
-                    Surface(color = NavigationBarDefaults.containerColor) {
+                    Surface(color = MaterialTheme.colorScheme.surface) {
                         Column {
+                            HorizontalDivider(
+                                color = MaterialTheme.colorScheme.outlineVariant
+                            )
                             NavigationBar(
                                 modifier = Modifier.height(64.dp),
                                 containerColor = Color.Transparent,
@@ -196,9 +192,7 @@ fun ResonanceNavHost(
             composable(Routes.LIBRARY) {
                 LibraryScreen(
                     onArtistClick = { navController.navigate(Routes.artist(it)) },
-                    onAlbumClick = { navController.navigate(Routes.album(it)) },
-                    onPlaylistClick = { navController.navigate(Routes.playlist(it)) },
-                    onGenreClick = { navController.navigate(Routes.genre(it)) }
+                    onAlbumClick = { navController.navigate(Routes.album(it)) }
                 )
             }
 
@@ -280,28 +274,6 @@ fun ResonanceNavHost(
                 )
             }
 
-            composable(
-                route = Routes.PLAYLIST,
-                arguments = listOf(navArgument("playlistId") { type = NavType.StringType })
-            ) { backStackEntry ->
-                PlaylistScreen(
-                    playlistId = backStackEntry.arguments?.getString("playlistId") ?: "",
-                    onBackClick = { navController.popBackStack() },
-                    onAlbumClick = { navController.navigate(Routes.album(it)) },
-                    onArtistClick = { navController.navigate(Routes.artist(it)) }
-                )
-            }
-
-            composable(
-                route = Routes.GENRE,
-                arguments = listOf(navArgument("genre") { type = NavType.StringType })
-            ) { backStackEntry ->
-                GenreScreen(
-                    genre = backStackEntry.arguments?.getString("genre") ?: "",
-                    onBackClick = { navController.popBackStack() },
-                    onAlbumClick = { navController.navigate(Routes.album(it)) }
-                )
-            }
         }
     }
 }

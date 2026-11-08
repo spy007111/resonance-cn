@@ -218,6 +218,7 @@ fun ArtistScreen(
                     itemsIndexed(uiState.tracks, key = { index, s -> "${s.id}_$index" }) { index, song ->
                         SongListItem(
                             song = song,
+                            coverArtUrl = song.coverArt?.let { uiState.coverArtUrlBuilder?.invoke(it) },
                             onClick = { viewModel.playTrackAt(index) },
                             actions = SongActions(
                                 onPlayNext = { viewModel.playNext(song) },

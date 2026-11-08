@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.QueueMusic
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -24,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.resonance.music.ui.components.AlbumCard
 import com.resonance.music.ui.components.AlbumListItem
+import com.resonance.music.ui.components.ArtistAvatar
 import com.resonance.music.ui.components.SlimTopBar
 import com.resonance.music.ui.components.SongActions
 import com.resonance.music.ui.components.SongListItem
@@ -32,8 +32,6 @@ enum class LibraryTab(val label: String) {
     Songs("歌曲"),
     Artists("歌手"),
     Albums("专辑"),
-    Playlists("歌单"),
-    Genres("流派"),
     Favorites("收藏")
 }
 
@@ -42,8 +40,6 @@ enum class LibraryTab(val label: String) {
 fun LibraryScreen(
     onArtistClick: (String) -> Unit,
     onAlbumClick: (String) -> Unit,
-    onPlaylistClick: (String) -> Unit,
-    onGenreClick: (String) -> Unit,
     viewModel: LibraryViewModel = hiltViewModel()
 ) {
     var selectedTab by remember { mutableStateOf(LibraryTab.Songs) }
@@ -55,8 +51,6 @@ fun LibraryScreen(
             LibraryTab.Songs -> viewModel.loadSongs()
             LibraryTab.Artists -> viewModel.loadArtists()
             LibraryTab.Albums -> viewModel.loadAlbums()
-            LibraryTab.Genres -> viewModel.loadGenres()
-            LibraryTab.Playlists -> viewModel.loadPlaylists()
             LibraryTab.Favorites -> viewModel.loadFavorites()
         }
     }
@@ -98,8 +92,6 @@ fun LibraryScreen(
                         LibraryTab.Songs -> SongsTab(uiState, onAlbumClick, onArtistClick, viewModel)
                         LibraryTab.Artists -> ArtistsTab(uiState, onArtistClick)
                         LibraryTab.Albums -> AlbumsTab(uiState, onAlbumClick, viewModel::setAlbumSort)
-                        LibraryTab.Genres -> GenresTab(uiState, onGenreClick)
-                        LibraryTab.Playlists -> PlaylistsTab(uiState, onPlaylistClick)
                         LibraryTab.Favorites -> FavoritesTab(uiState, onAlbumClick, onArtistClick, viewModel)
                     }
                     PullToRefreshContainer(
@@ -169,6 +161,7 @@ private fun SongsTab(
                 items(uiState.songs, key = { it.id }, contentType = { "song" }) { song ->
                     SongListItem(
                         song = song,
+                        coverArtUrl = song.coverArt?.let { uiState.coverArtUrlBuilder?.invoke(it) },
                         onClick = { viewModel.playSong(song) },
                         actions = SongActions(
                             onPlayNext = { viewModel.playNext(song) },
@@ -198,7 +191,11 @@ private fun ArtistsTab(uiState: LibraryUiState, onArtistClick: (String) -> Unit)
                         artist.albumCount?.let { Text("$it albums") }
                     },
                     leadingContent = {
-                        Icon(Icons.Default.Person, contentDescription = null)
+                        ArtistAvatar(
+                            name = artist.name,
+                            imageUrl = (artist.coverArt ?: artist.id)
+                                .let { uiState.coverArtUrlBuilder?.invoke(it) }
+                        )
                     },
                     modifier = Modifier.clickable { onArtistClick(artist.id) }
                 )
@@ -261,52 +258,6 @@ private fun AlbumsTab(
 }
 
 @Composable
-private fun GenresTab(uiState: LibraryUiState, onGenreClick: (String) -> Unit) {
-    if (uiState.genres.isEmpty()) {
-        EmptyState(Icons.Default.Category, "流派", "No genres found")
-    } else {
-        LazyColumn(contentPadding = PaddingValues(bottom = 12.dp)) {
-            items(uiState.genres, key = { it.name }, contentType = { "genre" }) { genre ->
-                ListItem(
-                    headlineContent = { Text(genre.name) },
-                    supportingContent = { genre.albumCount?.let { Text("$it albums") } },
-                    leadingContent = { Icon(Icons.Default.Category, contentDescription = null) },
-                    modifier = Modifier.clickable { onGenreClick(genre.name) }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun PlaylistsTab(uiState: LibraryUiState, onPlaylistClick: (String) -> Unit) {
-    if (uiState.playlists.isEmpty()) {
-        EmptyState(Icons.AutoMirrored.Filled.QueueMusic, "歌单", "No playlists found")
-    } else {
-        LazyColumn(contentPadding = PaddingValues(bottom = 12.dp)) {
-            items(uiState.playlists, key = { it.id }, contentType = { "playlist" }) { playlist ->
-                ListItem(
-                    headlineContent = {
-                        Text(playlist.name, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    },
-                    supportingContent = {
-                        val details = listOfNotNull(
-                            playlist.songCount?.let { "$it songs" },
-                            playlist.owner
-                        ).joinToString(" \u2022 ")
-                        if (details.isNotEmpty()) Text(details)
-                    },
-                    leadingContent = {
-                        Icon(Icons.AutoMirrored.Filled.QueueMusic, contentDescription = null)
-                    },
-                    modifier = Modifier.clickable { onPlaylistClick(playlist.id) }
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun FavoritesTab(
     uiState: LibraryUiState,
     onAlbumClick: (String) -> Unit,
@@ -332,7 +283,13 @@ private fun FavoritesTab(
                 items(uiState.starredArtists, key = { it.id }, contentType = { "artist" }) { artist ->
                     ListItem(
                         headlineContent = { Text(artist.name) },
-                        leadingContent = { Icon(Icons.Default.Person, contentDescription = null) },
+                        leadingContent = {
+                            ArtistAvatar(
+                                name = artist.name,
+                                imageUrl = (artist.coverArt ?: artist.id)
+                                    .let { uiState.coverArtUrlBuilder?.invoke(it) }
+                            )
+                        },
                         modifier = Modifier.clickable { onArtistClick(artist.id) }
                     )
                 }
@@ -366,6 +323,7 @@ private fun FavoritesTab(
                 items(uiState.starredSongs, key = { it.id }, contentType = { "song" }) { song ->
                     SongListItem(
                         song = song,
+                        coverArtUrl = song.coverArt?.let { uiState.coverArtUrlBuilder?.invoke(it) },
                         onClick = { viewModel.playStarredSong(song) },
                         actions = SongActions(
                             onPlayNext = { viewModel.playNext(song) },

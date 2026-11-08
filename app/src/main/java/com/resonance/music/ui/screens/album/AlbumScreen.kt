@@ -147,10 +147,9 @@ fun AlbumScreen(
                             } ?: Modifier
                         )
 
-                        if (uiState.year != null || uiState.genre != null) {
+                        if (uiState.year != null) {
                             Text(
-                                text = listOfNotNull(uiState.year?.toString(), uiState.genre)
-                                    .joinToString(" \u2022 "),
+                                text = uiState.year.toString(),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -188,6 +187,7 @@ fun AlbumScreen(
                         SongListItem(
                             song = song,
                             trackNumber = song.track,
+                            coverArtUrl = song.coverArt?.let { uiState.coverArtUrlBuilder?.invoke(it) },
                             onClick = { viewModel.playSongAt(index) },
                             actions = SongActions(
                                 onPlayNext = { viewModel.playNext(song) },

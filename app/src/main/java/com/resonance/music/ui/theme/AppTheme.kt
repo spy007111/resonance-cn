@@ -2,6 +2,7 @@ package com.resonance.music.ui.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
 /**
@@ -15,52 +16,52 @@ enum class AppTheme(
 ) {
     NEON_PULSE(
         displayName = "Neon Pulse",
-        description = "Cyan & magenta cyberpunk",
+        description = "青蓝点缀",
         previewColor = NeonCyan
     ),
     AURORA(
         displayName = "Aurora",
-        description = "Northern lights green & purple",
+        description = "极光绿",
         previewColor = AuroraGreen
     ),
     MIDNIGHT_OCEAN(
         displayName = "Midnight Ocean",
-        description = "Deep blue & teal depths",
+        description = "深海蓝",
         previewColor = OceanBlue
     ),
     SOLAR_FLARE(
         displayName = "Solar Flare",
-        description = "Warm amber & orange energy",
+        description = "暖橙",
         previewColor = SolarAmber
     ),
     VOID(
         displayName = "Void",
-        description = "Ultra-minimal monochrome",
+        description = "极简灰",
         previewColor = VoidWhite
     ),
     SAKURA_BLOOM(
         displayName = "Sakura Bloom",
-        description = "Cherry blossom pink & rose",
+        description = "樱花粉",
         previewColor = SakuraPink
     ),
     EMERALD_CITY(
         displayName = "Emerald City",
-        description = "Rich green & gold luxury",
+        description = "翡翠绿",
         previewColor = EmeraldGreen
     ),
     CYBER_VIOLET(
         displayName = "Cyber Violet",
-        description = "Electric purple & indigo",
+        description = "电子紫",
         previewColor = CyberViolet
     ),
     ARCTIC_ICE(
         displayName = "Arctic Ice",
-        description = "Frosty blue & crisp white",
+        description = "冰蓝",
         previewColor = ArcticBlue
     ),
     MATERIAL_YOU(
         displayName = "Material You",
-        description = "Dynamic colors from your wallpaper",
+        description = "跟随壁纸",
         previewColor = Color(0xFF6750A4)
     );
 
@@ -255,5 +256,57 @@ enum class AppTheme(
         )
 
         MATERIAL_YOU -> darkColorScheme() // Placeholder — replaced at runtime
+    }
+    /**
+     * Light (white) schemes. The app is white-first: every theme is a white
+     * surface with one accent colour, so the UI reads the same in sunlight and
+     * the album art carries the visual weight instead of a dark chrome.
+     */
+    fun lightColorScheme(): ColorScheme {
+        val accent = when (this) {
+            NEON_PULSE -> Color(0xFF00838F)
+            AURORA -> Color(0xFF00875A)
+            MIDNIGHT_OCEAN -> Color(0xFF2962FF)
+            SOLAR_FLARE -> Color(0xFFB26500)
+            VOID -> Color(0xFF333333)
+            SAKURA_BLOOM -> Color(0xFFD81B60)
+            EMERALD_CITY -> Color(0xFF2E7D32)
+            CYBER_VIOLET -> Color(0xFF5E35B1)
+            ARCTIC_ICE -> Color(0xFF0277BD)
+            MATERIAL_YOU -> Color(0xFF6750A4)
+        }
+        val secondary = when (this) {
+            NEON_PULSE -> Color(0xFFC2185B)
+            AURORA -> Color(0xFF7B4FBF)
+            MIDNIGHT_OCEAN -> Color(0xFF00897B)
+            SOLAR_FLARE -> Color(0xFFC43E00)
+            VOID -> Color(0xFF666666)
+            SAKURA_BLOOM -> Color(0xFFB03060)
+            EMERALD_CITY -> Color(0xFFA67C00)
+            CYBER_VIOLET -> Color(0xFF4527A0)
+            ARCTIC_ICE -> Color(0xFF455A64)
+            MATERIAL_YOU -> Color(0xFF7D5260)
+        }
+        return lightColorScheme(
+            primary = accent,
+            onPrimary = Color.White,
+            primaryContainer = accent.copy(alpha = 0.14f),
+            onPrimaryContainer = Color(0xFF14161A),
+            secondary = secondary,
+            onSecondary = Color.White,
+            secondaryContainer = secondary.copy(alpha = 0.12f),
+            onSecondaryContainer = Color(0xFF14161A),
+            tertiary = secondary,
+            background = Color(0xFFFFFFFF),
+            onBackground = Color(0xFF14161A),
+            surface = Color(0xFFFFFFFF),
+            onSurface = Color(0xFF14161A),
+            surfaceVariant = Color(0xFFF2F3F5),
+            onSurfaceVariant = Color(0xFF5F6368),
+            outline = Color(0xFFDADCE0),
+            outlineVariant = Color(0xFFEDEFF2),
+            error = Color(0xFFD32F2F),
+            onError = Color.White
+        )
     }
 }

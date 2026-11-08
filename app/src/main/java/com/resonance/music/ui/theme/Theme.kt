@@ -1,9 +1,7 @@
 package com.resonance.music.ui.theme
 
 import android.app.Activity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -22,22 +20,21 @@ fun ResonanceTheme(
         ?: androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(AppTheme.NEON_PULSE) })
 
     val context = LocalContext.current
-    val isDarkSystem = isSystemInDarkTheme()
 
+    // White-first UI: every theme is a white surface with an accent colour.
+    // Material You keeps the wallpaper palette but stays light as well.
     val colorScheme = when (appTheme) {
-        AppTheme.MATERIAL_YOU -> {
-            if (isDarkSystem) dynamicDarkColorScheme(context)
-            else dynamicLightColorScheme(context)
-        }
-        else -> appTheme.darkColorScheme() // All custom themes are dark-first/futuristic
+        AppTheme.MATERIAL_YOU -> dynamicLightColorScheme(context)
+        else -> appTheme.lightColorScheme()
     }
 
-    val isLightTheme = appTheme == AppTheme.MATERIAL_YOU && !isDarkSystem
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = isLightTheme
+            // Dark (black) status/navigation icons on the white chrome.
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = true
         }
     }
 

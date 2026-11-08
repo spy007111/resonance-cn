@@ -1,7 +1,9 @@
 package com.resonance.music.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.*
@@ -9,14 +11,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.resonance.music.data.api.models.SongItem
 
 @Composable
 fun SongListItem(
     song: SongItem,
     trackNumber: Int? = null,
+    coverArtUrl: String? = null,
     onClick: () -> Unit,
     actions: SongActions = SongActions()
 ) {
@@ -36,19 +42,35 @@ fun SongListItem(
             )
         },
         leadingContent = {
-            if (trackNumber != null) {
-                Text(
-                    text = trackNumber.toString(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.width(24.dp)
-                )
-            } else {
-                Icon(
-                    Icons.Default.MusicNote,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            // Every song row carries its own artwork; the row falls back to the
+            // track number (on albums) or a note icon when the server has no art.
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentAlignment = Alignment.Center
+            ) {
+                if (coverArtUrl != null) {
+                    AsyncImage(
+                        model = coverArtUrl,
+                        contentDescription = song.title,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else if (trackNumber != null) {
+                    Text(
+                        text = trackNumber.toString(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    Icon(
+                        Icons.Default.MusicNote,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         },
         trailingContent = {
